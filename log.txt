@@ -1,0 +1,1237 @@
+uv run train_bangla_gru_sp-3.py
+Installed 54 packages in 203ms
+
+======================================================================
+  বাংলা Next Word Prediction - GRU + SentencePiece (Mac M1 MPS)
+======================================================================
+✓ Using MPS (Metal Performance Shaders) on Apple Silicon
+
+======================================================================
+ STEP 1: Loading Data
+======================================================================
+
+============================================================
+Loading: csebuetnlp/BanglaNMT
+============================================================
+README.md: 8.03kB [00:00, 6.99MB/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+BanglaNMT.py: 4.73kB [00:00, 5.87MB/s]
+  ✗ Error: Dataset scripts are no longer supported, but found BanglaNMT.py
+
+============================================================
+Loading: wikimedia/wikipedia (Bengali)
+============================================================
+README.md: 131kB [00:00, 206MB/s]
+  ✓ Loaded (streaming mode)
+     Loaded 10,000 articles...
+     Loaded 20,000 articles...
+     Loaded 30,000 articles...
+     Loaded 40,000 articles...
+     Loaded 50,000 articles...
+  ✓ Added 50,000 Wikipedia articles
+
+============================================================
+Loading: shawon95/Bengali-Fake-Review-Dataset
+============================================================
+README.md: 3.14kB [00:00, 4.08MB/s]
+fake.csv: 1.90MB [00:00, 3.91MB/s]
+non-fake.csv: 100%|████████████████████████████████████████████████████████████████| 12.1M/12.1M [00:03<00:00, 3.10MB/s]
+Generating train split: 100%|█████████████████████████████████████████████| 9049/9049 [00:00<00:00, 65634.71 examples/s]
+  ✓ Loaded 9,049 samples
+  Columns: ['Review', 'Label']
+  ✓ Added 9,049 reviews from 'Review'
+
+============================================================
+TOTAL TEXTS LOADED: 59,049
+============================================================
+
+======================================================================
+ STEP 2: Training SentencePiece Tokenizer
+======================================================================
+Training SentencePiece tokenizer...
+  Processed 10,000 texts for tokenizer training...
+  Processed 20,000 texts for tokenizer training...
+  Processed 30,000 texts for tokenizer training...
+  Processed 40,000 texts for tokenizer training...
+  Processed 50,000 texts for tokenizer training...
+  Total texts with Bangla content: 58,814
+sentencepiece_trainer.cc(78) LOG(INFO) Starts training with : 
+trainer_spec {
+  input: /var/folders/2k/vv6y13x14dv6dyll2f4xz_kr0000gn/T/tmp9_1czaf6.txt
+  input_format: 
+  model_prefix: bangla_gru_sp/sp_bangla
+  model_type: BPE
+  vocab_size: 16000
+  self_test_sample_size: 0
+  character_coverage: 0.9995
+  input_sentence_size: 0
+  shuffle_input_sentence: 1
+  seed_sentencepiece_size: 1000000
+  shrinking_factor: 0.75
+  max_sentence_length: 4192
+  num_threads: 10
+  num_sub_iterations: 2
+  max_sentencepiece_length: 16
+  split_by_unicode_script: 1
+  split_by_number: 1
+  split_by_whitespace: 1
+  split_digits: 0
+  pretokenization_delimiter: 
+  treat_whitespace_as_suffix: 0
+  allow_whitespace_only_pieces: 0
+  required_chars: 
+  byte_fallback: 0
+  vocabulary_output_piece_score: 1
+  train_extremely_large_corpus: 0
+  seed_sentencepieces_file: 
+  hard_vocab_limit: 1
+  use_all_vocab: 0
+  unk_id: 1
+  bos_id: 2
+  eos_id: 3
+  pad_id: 0
+  unk_piece: <unk>
+  bos_piece: <s>
+  eos_piece: </s>
+  pad_piece: <pad>
+  unk_surface:  ⁇ 
+  enable_differential_privacy: 0
+  differential_privacy_noise_level: 0
+  differential_privacy_clipping_threshold: 0
+}
+normalizer_spec {
+  name: identity
+  add_dummy_prefix: 0
+  remove_extra_whitespaces: 1
+  escape_whitespaces: 1
+  normalization_rule_tsv: 
+}
+denormalizer_spec {}
+trainer_interface.cc(355) LOG(INFO) SentenceIterator is not specified. Using MultiFileSentenceIterator.
+trainer_interface.cc(186) LOG(INFO) Loading corpus: /var/folders/2k/vv6y13x14dv6dyll2f4xz_kr0000gn/T/tmp9_1czaf6.txt
+trainer_interface.cc(382) LOG(WARNING) Found too long line (61293 > 4192).
+trainer_interface.cc(384) LOG(WARNING) Too long lines are skipped in the training.
+trainer_interface.cc(385) LOG(WARNING) The maximum length can be changed with --max_sentence_length=<size> flag.
+trainer_interface.cc(411) LOG(INFO) Loaded all 36619 sentences
+trainer_interface.cc(418) LOG(INFO) Skipped 22195 too long sentences.
+trainer_interface.cc(427) LOG(INFO) Adding meta_piece: <pad>
+trainer_interface.cc(427) LOG(INFO) Adding meta_piece: <unk>
+trainer_interface.cc(427) LOG(INFO) Adding meta_piece: <s>
+trainer_interface.cc(427) LOG(INFO) Adding meta_piece: </s>
+trainer_interface.cc(432) LOG(INFO) Normalizing sentences...
+trainer_interface.cc(541) LOG(INFO) all chars count=24686441
+trainer_interface.cc(552) LOG(INFO) Done: 99.9616% characters are covered.
+trainer_interface.cc(562) LOG(INFO) Alphabet size=67
+trainer_interface.cc(563) LOG(INFO) Final character coverage=0.999616
+trainer_interface.cc(594) LOG(INFO) Done! preprocessed 36619 sentences.
+trainer_interface.cc(600) LOG(INFO) Tokenizing input sentences with whitespace: 36619
+trainer_interface.cc(611) LOG(INFO) Done! 225336
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=429916 min_freq=1108
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=131833 size=20 all=4727 active=2418 piece=▁ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=69739 size=40 all=6508 active=4199 piece=▁বি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49322 size=60 all=8410 active=6101 piece=▁২
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=37619 size=80 all=10225 active=7916 piece=ীয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=28645 size=100 all=12106 active=9797 piece=▁সাল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=28447 min_freq=3067
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=24070 size=120 all=13787 active=2636 piece=▁উপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=21509 size=140 all=15438 active=4287 piece=দ্
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=18305 size=160 all=17611 active=6460 piece=▁৫
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=16767 size=180 all=19507 active=8356 piece=র্ব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=15301 size=200 all=21339 active=10188 piece=▁মধ্যে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=15071 min_freq=2522
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=13848 size=220 all=23005 active=2726 piece=িয়ে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=12598 size=240 all=25025 active=4746 piece=িকা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=11801 size=260 all=27068 active=6789 piece=াদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=10928 size=280 all=28890 active=8611 piece=ীন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=10188 size=300 all=30201 active=9922 piece=▁ক্রিকেট
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=10184 min_freq=1546
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=9564 size=320 all=32374 active=3670 piece=▁নদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=9016 size=340 all=34038 active=5334 piece=▁মু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=8462 size=360 all=35593 active=6889 piece=সম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=7772 size=380 all=37345 active=8641 piece=▁১৮
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=7405 size=400 all=38629 active=9925 piece=লের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=7295 min_freq=1048
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=6989 size=420 all=40704 active=3883 piece=▁উত্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=6682 size=440 all=41420 active=4599 piece=▁১৯৯
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=6497 size=460 all=42147 active=5326 piece=▁অক্টোবর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=6161 size=480 all=43451 active=6630 piece=ুরু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=5853 size=500 all=45372 active=8551 piece=▁বিশ্ববিদ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=5843 min_freq=829
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=5516 size=520 all=46658 active=3550 piece=▁উপজ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=5288 size=540 all=48399 active=5291 piece=▁অঞ্চ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=5000 size=560 all=49745 active=6637 piece=ালি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=4721 size=580 all=51274 active=8166 piece=ুপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=4587 size=600 all=52601 active=9493 piece=▁খেল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=4579 min_freq=654
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=4474 size=620 all=54142 active=4150 piece=▁এলা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=4260 size=640 all=55043 active=5051 piece=▁মো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=4093 size=660 all=56303 active=6311 piece=▁দাম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3966 size=680 all=57333 active=7341 piece=িভি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3809 size=700 all=58504 active=8512 piece=▁সরকার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=3802 min_freq=558
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3642 size=720 all=60035 active=4440 piece=বাহ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3505 size=740 all=61689 active=6094 piece=খ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3389 size=760 all=63368 active=7773 piece=্তন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3256 size=780 all=64348 active=8753 piece=▁প্লে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3151 size=800 all=65313 active=9718 piece=▁পশ্চিমবঙ্গ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=3142 min_freq=476
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=3080 size=820 all=66139 active=4088 piece=ল্প
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2970 size=840 all=67191 active=5140 piece=▁কলক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2907 size=860 all=68411 active=6360 piece=▁পুরুষদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2822 size=880 all=69406 active=7355 piece=▁নিউ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2732 size=900 all=70748 active=8697 piece=রম
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=2732 min_freq=419
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2671 size=920 all=71803 active=4448 piece=▁কর্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2636 size=940 all=72465 active=5110 piece=ম্ব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2583 size=960 all=73261 active=5906 piece=্যে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2521 size=980 all=74437 active=7082 piece=▁কর্তৃ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2455 size=1000 all=75172 active=7817 piece=▁তা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=2455 min_freq=377
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2405 size=1020 all=76053 active=4617 piece=▁বর্তমানে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2325 size=1040 all=76652 active=5216 piece=▁বির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2269 size=1060 all=77375 active=5939 piece=ক্স
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2205 size=1080 all=78665 active=7229 piece=▁এটা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2144 size=1100 all=79607 active=8171 piece=ালী
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=2144 min_freq=342
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2103 size=1120 all=80869 active=5133 piece=ন্যাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=2038 size=1140 all=81921 active=6185 piece=▁পরি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1997 size=1160 all=82938 active=7202 piece=▁খান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1955 size=1180 all=84072 active=8336 piece=▁বাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1924 size=1200 all=84844 active=9108 piece=▁উৎপ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1922 min_freq=309
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1880 size=1220 all=85877 active=5260 piece=▁অবস্থান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1834 size=1240 all=86227 active=5610 piece=▁২৫
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1800 size=1260 all=87110 active=6493 piece=▁বর্ষপঞ্জির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1752 size=1280 all=88117 active=7500 piece=▁বলতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1719 size=1300 all=88628 active=8011 piece=▁কোনো
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1719 min_freq=285
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1688 size=1320 all=89477 active=5269 piece=িও
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1663 size=1340 all=90868 active=6660 piece=▁মিরপুর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1628 size=1360 all=91712 active=7504 piece=▁কোম্পানি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1597 size=1380 all=92423 active=8215 piece=▁সার্ভ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1568 size=1400 all=93081 active=8873 piece=▁নিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1567 min_freq=259
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1540 size=1420 all=94251 active=5780 piece=েইন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1504 size=1440 all=95257 active=6786 piece=▁নেই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1477 size=1460 all=96426 active=7955 piece=▁ফুটবলার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1453 size=1480 all=97289 active=8818 piece=িয়ায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1434 size=1500 all=98016 active=9545 piece=াবাহ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1431 min_freq=237
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1408 size=1520 all=98652 active=5497 piece=▁রাজধান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1381 size=1540 all=99520 active=6365 piece=▁কম্পিউটার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1353 size=1560 all=100424 active=7269 piece=াড়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1336 size=1580 all=101120 active=7965 piece=গের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1322 size=1600 all=101935 active=8780 piece=▁খাদ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1322 min_freq=221
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1301 size=1620 all=102929 active=6070 piece=্লাহ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1282 size=1640 all=103439 active=6580 piece=▁ম্যান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1271 size=1660 all=104122 active=7263 piece=▁চ্যাম্পিয়ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1252 size=1680 all=104799 active=7940 piece=▁হলেও
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1227 size=1700 all=105792 active=8933 piece=ূর্ণ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1226 min_freq=206
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1200 size=1720 all=106462 active=5925 piece=▁উল্লেখযোগ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1180 size=1740 all=107043 active=6506 piece=্রম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1166 size=1760 all=107661 active=7124 piece=▁গরম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1146 size=1780 all=108377 active=7840 piece=▁দর্শন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1125 size=1800 all=109221 active=8684 piece=▁ফ্রে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1121 min_freq=194
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1106 size=1820 all=109845 active=6057 piece=▁তিনটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1093 size=1840 all=111015 active=7227 piece=ধা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1082 size=1860 all=111790 active=8002 piece=োদ্
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1063 size=1880 all=112924 active=9136 piece=▁ফ্রান্স
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1045 size=1900 all=113618 active=9830 piece=▁খিল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=1045 min_freq=182
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1032 size=1920 all=114581 active=6626 piece=ানির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1017 size=1940 all=115219 active=7264 piece=▁সত্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=1004 size=1960 all=115696 active=7741 piece=ুরী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=991 size=1980 all=116356 active=8401 piece=াধিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=974 size=2000 all=117211 active=9256 piece=▁বের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=974 min_freq=171
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=964 size=2020 all=117851 active=6442 piece=মেন্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=953 size=2040 all=118610 active=7201 piece=▁হাত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=939 size=2060 all=119533 active=8124 piece=▁খেলে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=921 size=2080 all=119933 active=8524 piece=▁পরিবার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=910 size=2100 all=120428 active=9019 piece=▁৪৭
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=909 min_freq=161
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=898 size=2120 all=121582 active=7161 piece=▁অলিম্পিকে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=887 size=2140 all=122285 active=7864 piece=▁চালু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=877 size=2160 all=122774 active=8353 piece=ায়ার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=869 size=2180 all=123540 active=9119 piece=▁মিশ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=858 size=2200 all=124333 active=9912 piece=▁জিন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=858 min_freq=152
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=850 size=2220 all=124678 active=6514 piece=▁বর্ণিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=840 size=2240 all=124953 active=6789 piece=ুট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=832 size=2260 all=125710 active=7546 piece=▁স্টেড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=822 size=2280 all=126157 active=7993 piece=▁সফটওয়্যার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=817 size=2300 all=126570 active=8406 piece=▁তত্ত্ব
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=816 min_freq=146
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=807 size=2320 all=127087 active=6823 piece=জিল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=799 size=2340 all=127730 active=7466 piece=পে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=790 size=2360 all=128486 active=8222 piece=▁প্রাপ্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=779 size=2380 all=129297 active=9033 piece=িতায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=772 size=2400 all=130024 active=9760 piece=▁রাজশ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=771 min_freq=139
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=764 size=2420 all=130539 active=7012 piece=▁দোকান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=750 size=2440 all=131050 active=7523 piece=াসের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=741 size=2460 all=131595 active=8068 piece=▁খাদ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=736 size=2480 all=132074 active=8547 piece=▁এশিয়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=728 size=2500 all=132508 active=8981 piece=▁ব্যক্তিত্ব
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=727 min_freq=133
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=721 size=2520 all=133107 active=7216 piece=▁আমেরিকার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=715 size=2540 all=133581 active=7690 piece=▁ছাড়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=709 size=2560 all=133963 active=8072 piece=▁কাহিনী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=696 size=2580 all=134689 active=8798 piece=▁হই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=686 size=2600 all=135263 active=9372 piece=শালা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=685 min_freq=127
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=675 size=2620 all=136046 active=7524 piece=▁আশ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=669 size=2640 all=136434 active=7912 piece=▁চৌধুরী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=662 size=2660 all=136971 active=8449 piece=িসংখ্যান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=653 size=2680 all=137204 active=8682 piece=ডিআই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=649 size=2700 all=137631 active=9109 piece=▁তারপর
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=649 min_freq=122
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=642 size=2720 all=137966 active=7213 piece=উন্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=636 size=2740 all=138360 active=7607 piece=▁উপক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=630 size=2760 all=138653 active=7900 piece=▁অস্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=623 size=2780 all=139272 active=8519 piece=▁মসজিদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=616 size=2800 all=139748 active=8995 piece=ীনে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=616 min_freq=118
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=609 size=2820 all=140401 active=7631 piece=▁মিষ্টি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=602 size=2840 all=140971 active=8201 piece=ষ্টা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=597 size=2860 all=141542 active=8772 piece=▁বন্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=593 size=2880 all=141806 active=9036 piece=▁প্রতিটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=584 size=2900 all=142241 active=9471 piece=খিত
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=584 min_freq=114
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=579 size=2920 all=142768 active=7623 piece=▁ঘোষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=572 size=2940 all=143329 active=8184 piece=▁বিশ্বাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=569 size=2960 all=143754 active=8609 piece=▁চিত্রশালা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=563 size=2980 all=144591 active=9446 piece=ছড়ি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=558 size=3000 all=144977 active=9832 piece=ধর
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=558 min_freq=110
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=554 size=3020 all=145493 active=7686 piece=▁ক্ষমতা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=548 size=3040 all=146013 active=8206 piece=▁মহাবিদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=544 size=3060 all=146480 active=8673 piece=▁ইরা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=542 size=3080 all=146789 active=8982 piece=▁ইংল্যান্ডের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=537 size=3100 all=147290 active=9483 piece=▁কিংবা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=536 min_freq=106
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=533 size=3120 all=147835 active=7910 piece=▁১৮০
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=528 size=3140 all=148232 active=8307 piece=▁ক্রীড়াবিদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=524 size=3160 all=148745 active=8820 piece=▁ভূমিকা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=520 size=3180 all=149160 active=9235 piece=▁ভাত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=516 size=3200 all=149422 active=9497 piece=▁বিজ্ঞ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=515 min_freq=102
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=512 size=3220 all=149832 active=7873 piece=▁গৌ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=509 size=3240 all=150168 active=8209 piece=▁প্রাকৃতিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=501 size=3260 all=150610 active=8651 piece=সিংহ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=497 size=3280 all=151069 active=9110 piece=লাও
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=493 size=3300 all=151745 active=9786 piece=▁কিমি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=493 min_freq=99
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=488 size=3320 all=152128 active=7966 piece=ালো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=485 size=3340 all=152500 active=8338 piece=▁কারি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=482 size=3360 all=152717 active=8555 piece=▁ভুনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=477 size=3380 all=153103 active=8941 piece=▁পোস্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=475 size=3400 all=153551 active=9389 piece=▁শুধুমাত্র
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=474 min_freq=96
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=470 size=3420 all=154084 active=8207 piece=▁পার্শ্ব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=466 size=3440 all=154499 active=8622 piece=▁বাট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=463 size=3460 all=154775 active=8898 piece=▁৩৪
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=461 size=3480 all=155320 active=9443 piece=▁১৯৭৬
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=457 size=3500 all=155723 active=9846 piece=▁বাণিজ্যিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=457 min_freq=93
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=452 size=3520 all=156182 active=8239 piece=▁ওই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=450 size=3540 all=156501 active=8558 piece=▁লিগের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=445 size=3560 all=156912 active=8969 piece=▁একর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=442 size=3580 all=157467 active=9524 piece=ক্ষেপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=439 size=3600 all=157891 active=9948 piece=▁সম্পাদক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=438 min_freq=90
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=436 size=3620 all=158313 active=8309 piece=▁সংশ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=433 size=3640 all=158541 active=8537 piece=▁গুলশান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=430 size=3660 all=158893 active=8889 piece=কদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=427 size=3680 all=159645 active=9641 piece=▁কিছ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=423 size=3700 all=160363 active=10359 piece=োগ্রা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=423 min_freq=87
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=420 size=3720 all=160724 active=8343 piece=▁অগ্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=418 size=3740 all=160971 active=8590 piece=▁উইকিপিডিয়ায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=414 size=3760 all=161537 active=9156 piece=▁দিনাজপুর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=412 size=3780 all=162086 active=9705 piece=▁পঞ্জিকার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=409 size=3800 all=162446 active=10065 piece=হেতু
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=409 min_freq=84
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=406 size=3820 all=162885 active=8556 piece=১৩
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=404 size=3840 all=163211 active=8882 piece=▁১৯৫০
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=401 size=3860 all=163777 active=9448 piece=▁১৯৬৪
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=399 size=3880 all=164031 active=9702 piece=চল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=396 size=3900 all=164409 active=10080 piece=▁ভেত
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=396 min_freq=82
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=394 size=3920 all=164718 active=8527 piece=▁তালিকায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=392 size=3940 all=165185 active=8994 piece=▁গুলা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=390 size=3960 all=165581 active=9390 piece=▁রাস্তাটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=387 size=3980 all=166053 active=9862 piece=▁শিক্ষালাভ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=384 size=4000 all=166591 active=10400 piece=▁মন্দিরের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=383 min_freq=80
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=381 size=4020 all=166997 active=8735 piece=▁বরিশাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=378 size=4040 all=167299 active=9037 piece=▁জুল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=376 size=4060 all=167655 active=9393 piece=▁ভুল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=374 size=4080 all=167925 active=9663 piece=▁হলুদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=371 size=4100 all=168295 active=10033 piece=াভাবিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=371 min_freq=78
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=368 size=4120 all=168788 active=8900 piece=ুতি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=366 size=4140 all=169224 active=9336 piece=উদ্দিন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=364 size=4160 all=169414 active=9526 piece=▁খেলোয়াড়ী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=361 size=4180 all=169809 active=9921 piece=▁ছবিতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=359 size=4200 all=170083 active=10195 piece=▁তুলনা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=359 min_freq=76
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=357 size=4220 all=170697 active=9114 piece=▁তালিকাভুক্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=355 size=4240 all=171165 active=9582 piece=▁দ্পাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=353 size=4260 all=171381 active=9798 piece=চেস্টার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=350 size=4280 all=171840 active=10257 piece=্ডার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=348 size=4300 all=172425 active=10842 piece=▁মন্ত্রণালয়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=347 min_freq=74
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=346 size=4320 all=172963 active=9156 piece=▁ছায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=344 size=4340 all=173158 active=9351 piece=▁তন্ত্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=342 size=4360 all=173419 active=9612 piece=▁সরীসৃপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=339 size=4380 all=173775 active=9968 piece=▁আসনটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=337 size=4400 all=174033 active=10226 piece=মূল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=337 min_freq=72
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=335 size=4420 all=174381 active=8976 piece=▁ভব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=333 size=4440 all=174751 active=9346 piece=▁কল্পকাহিনী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=330 size=4460 all=174998 active=9593 piece=▁লন্ডন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=328 size=4480 all=175428 active=10023 piece=▁১৯৪০
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=326 size=4500 all=175967 active=10562 piece=▁লিপি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=326 min_freq=70
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=324 size=4520 all=176204 active=9025 piece=▁গ্রিল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=321 size=4540 all=176479 active=9300 piece=▁কুন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=318 size=4560 all=176843 active=9664 piece=▁উপত্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=316 size=4580 all=177093 active=9914 piece=▁ছু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=315 size=4600 all=177389 active=10210 piece=▁স্বাভাবিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=314 min_freq=69
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=312 size=4620 all=177649 active=9125 piece=▁৮৮
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=310 size=4640 all=178001 active=9477 piece=্বাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=308 size=4660 all=178380 active=9856 piece=কির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=306 size=4680 all=178733 active=10209 piece=▁যৌগ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=304 size=4700 all=179069 active=10545 piece=▁সচ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=304 min_freq=67
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=302 size=4720 all=179357 active=9231 piece=▁গুপ্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=301 size=4740 all=179640 active=9514 piece=▁অতিক্রম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=299 size=4760 all=179897 active=9771 piece=▁ধাতু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=297 size=4780 all=180224 active=10098 piece=▁জাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=295 size=4800 all=180441 active=10315 piece=বত
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=295 min_freq=66
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=294 size=4820 all=180787 active=9322 piece=পুরি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=292 size=4840 all=181091 active=9626 piece=কান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=291 size=4860 all=181504 active=10039 piece=্বিয়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=289 size=4880 all=181928 active=10463 piece=▁খণ্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=287 size=4900 all=182063 active=10598 piece=কোট
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=287 min_freq=64
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=286 size=4920 all=182265 active=9257 piece=▁স্কয়ার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=284 size=4940 all=182608 active=9600 piece=▁যথ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=283 size=4960 all=182997 active=9989 piece=মারের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=282 size=4980 all=183502 active=10494 piece=▁শারীর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=280 size=5000 all=183830 active=10822 piece=লিং
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=280 min_freq=63
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=279 size=5020 all=184255 active=9557 piece=▁বেশী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=277 size=5040 all=184728 active=10030 piece=▁ডেন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=276 size=5060 all=185108 active=10410 piece=▁ফরি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=274 size=5080 all=185531 active=10833 piece=▁গোত্রের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=271 size=5100 all=185928 active=11230 piece=দল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=271 min_freq=61
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=270 size=5120 all=186379 active=9681 piece=▁বাজারে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=269 size=5140 all=186596 active=9898 piece=▁প্রতিষ্ঠানের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=267 size=5160 all=187041 active=10343 piece=▁ওয়ে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=265 size=5180 all=187277 active=10579 piece=িব্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=263 size=5200 all=187634 active=10936 piece=ধ্যে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=263 min_freq=60
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=262 size=5220 all=188034 active=9762 piece=▁শেস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=261 size=5240 all=188343 active=10071 piece=তান্ত্রিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=259 size=5260 all=188785 active=10513 piece=▁খ্রিষ্টাব্দের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=257 size=5280 all=189234 active=10962 piece=▁ড্রিংক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=255 size=5300 all=189584 active=11312 piece=▁ওয়াল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=255 min_freq=59
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=253 size=5320 all=189916 active=9774 piece=▁ফোন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=252 size=5340 all=190108 active=9966 piece=▁একজনের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=250 size=5360 all=190379 active=10237 piece=▁পোশাক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=249 size=5380 all=190669 active=10527 piece=▁বার্ষিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=247 size=5400 all=190974 active=10832 piece=▁হাইড্র
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=247 min_freq=58
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=245 size=5420 all=191295 active=9845 piece=শিক্ষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=244 size=5440 all=191562 active=10112 piece=▁বোলিং
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=243 size=5460 all=191854 active=10404 piece=▁প্রজনন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=242 size=5480 all=192060 active=10610 piece=▁মিরপুরে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=240 size=5500 all=192355 active=10905 piece=▁পাতার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=240 min_freq=57
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=238 size=5520 all=192684 active=9947 piece=▁যশোর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=237 size=5540 all=192891 active=10154 piece=▁কাস্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=235 size=5560 all=193208 active=10471 piece=▁৯৫
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=234 size=5580 all=193535 active=10798 piece=▁পরিপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=233 size=5600 all=193796 active=11059 piece=▁লিংক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=233 min_freq=55
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=232 size=5620 all=194154 active=10035 piece=▁অবি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=231 size=5640 all=194339 active=10220 piece=▁গ্রুব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=230 size=5660 all=194684 active=10565 piece=▁মেদিন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=229 size=5680 all=194964 active=10845 piece=▁প্রসার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=228 size=5700 all=195141 active=11022 piece=▁দুইজন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=228 min_freq=55
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=226 size=5720 all=195433 active=10046 piece=ইয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=226 size=5740 all=195953 active=10566 piece=▁প্রধানের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=224 size=5760 all=196239 active=10852 piece=▁ডিজাইন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=223 size=5780 all=196557 active=11170 piece=▁প্রতিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=222 size=5800 all=196963 active=11576 piece=▁রক্ষা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=222 min_freq=54
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=221 size=5820 all=197213 active=10099 piece=▁রেস্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=220 size=5840 all=197441 active=10327 piece=▁সরবরা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=219 size=5860 all=197833 active=10719 piece=▁রেজালা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=218 size=5880 all=198137 active=11023 piece=▁প্যাক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=217 size=5900 all=198461 active=11347 piece=▁কম্বিনেশন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=217 min_freq=53
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=215 size=5920 all=198588 active=10045 piece=ুহ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=214 size=5940 all=199018 active=10475 piece=েশনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=213 size=5960 all=199215 active=10672 piece=্ফ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=212 size=5980 all=199779 active=11236 piece=▁আইএস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=211 size=6000 all=200214 active=11671 piece=সূচক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=211 min_freq=51
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=210 size=6020 all=200498 active=10275 piece=▁ঝোল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=210 size=6040 all=200662 active=10439 piece=▁প্রতিষ্ঠানটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=209 size=6060 all=201069 active=10846 piece=▁বাংলায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=208 size=6080 all=201477 active=11254 piece=▁দেওয়ার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=207 size=6100 all=201770 active=11547 piece=▁অর্ধেক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=207 min_freq=50
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=206 size=6120 all=202000 active=10313 piece=▁ভ্যান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=205 size=6140 all=202275 active=10588 piece=▁মাটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=204 size=6160 all=202509 active=10822 piece=্যাশ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=203 size=6180 all=202809 active=11122 piece=▁৯৭
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=202 size=6200 all=202973 active=11286 piece=চির
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=202 min_freq=50
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=202 size=6220 all=203175 active=10313 piece=▁বাগেরহাট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=200 size=6240 all=203381 active=10519 piece=কাম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=200 size=6260 all=203888 active=11026 piece=▁আটলান্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=199 size=6280 all=204169 active=11307 piece=▁লেখিকা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=197 size=6300 all=204357 active=11495 piece=ষধি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=197 min_freq=49
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=196 size=6320 all=204545 active=10403 piece=বিটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=195 size=6340 all=204708 active=10566 piece=▁১৯২৬
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=194 size=6360 all=204916 active=10774 piece=▁ভয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=193 size=6380 all=205147 active=11005 piece=▁লেক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=192 size=6400 all=205369 active=11227 piece=ামিন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=192 min_freq=48
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=191 size=6420 all=205662 active=10541 piece=▁চলবে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=190 size=6440 all=205744 active=10623 piece=▁তি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=190 size=6460 all=206033 active=10912 piece=▁নারায়ণগঞ্জ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=189 size=6480 all=206532 active=11411 piece=িয়েন্স
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=188 size=6500 all=206803 active=11682 piece=▁চূড়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=188 min_freq=47
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=187 size=6520 all=207141 active=10668 piece=াগুলির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=186 size=6540 all=207423 active=10950 piece=▁কিল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=185 size=6560 all=207734 active=11261 piece=▁তির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=184 size=6580 all=207904 active=11431 piece=বছর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=184 size=6600 all=208197 active=11724 piece=▁সাধারন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=184 min_freq=46
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=183 size=6620 all=208559 active=10769 piece=▁কন্ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=182 size=6640 all=208730 active=10940 piece=▁রিং
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=181 size=6660 all=209035 active=11245 piece=▁সীম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=181 size=6680 all=209151 active=11361 piece=▁মালিকানাধীন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=180 size=6700 all=209445 active=11655 piece=▁কারখানা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=180 min_freq=46
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=179 size=6720 all=209870 active=10895 piece=▁ঢাকায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=178 size=6740 all=210092 active=11117 piece=পুত্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=177 size=6760 all=210244 active=11269 piece=মিল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=177 size=6780 all=210510 active=11535 piece=▁যমুনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=176 size=6800 all=210684 active=11709 piece=▁সবজি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=176 min_freq=45
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=175 size=6820 all=210950 active=10795 piece=ুইন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=175 size=6840 all=211206 active=11051 piece=▁সংলগ্ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=174 size=6860 all=211646 active=11491 piece=▁আগ্নে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=173 size=6880 all=211782 active=11627 piece=্থান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=173 size=6900 all=211995 active=11840 piece=▁জোয়ার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=173 min_freq=44
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=172 size=6920 all=212205 active=10804 piece=▁অনুসরণ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=171 size=6940 all=212477 active=11076 piece=▁রীতি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=170 size=6960 all=212789 active=11388 piece=ুলার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=169 size=6980 all=213078 active=11677 piece=▁আউ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=169 size=7000 all=213229 active=11828 piece=▁স্বতন্ত্র
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=169 min_freq=43
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=168 size=7020 all=213520 active=10947 piece=▁কোরীয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=167 size=7040 all=213870 active=11297 piece=▁অমৃত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=166 size=7060 all=214010 active=11437 piece=▁ইলিন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=166 size=7080 all=214087 active=11514 piece=▁ইন্দোনেশিয়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=165 size=7100 all=214294 active=11721 piece=▁মায়ের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=165 min_freq=43
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=164 size=7120 all=214515 active=10935 piece=▁ভ্যাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=163 size=7140 all=214803 active=11223 piece=▁ঘ্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=162 size=7160 all=215115 active=11535 piece=পুরুষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=161 size=7180 all=215379 active=11799 piece=▁ওঠ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=161 size=7200 all=215559 active=11979 piece=▁মেক্সিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=161 min_freq=42
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=160 size=7220 all=215895 active=11105 piece=▁গানটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=159 size=7240 all=216085 active=11295 piece=▁গ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=159 size=7260 all=216242 active=11452 piece=▁প্রায়ই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=158 size=7280 all=216459 active=11669 piece=▁জনগণনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=157 size=7300 all=216774 active=11984 piece=িয়াজ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=157 min_freq=42
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=156 size=7320 all=216974 active=10996 piece=▁হাক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=156 size=7340 all=217100 active=11122 piece=▁ফিজিক্যাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=155 size=7360 all=217469 active=11491 piece=▁ফ্যান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=154 size=7380 all=217734 active=11756 piece=▁সোজা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=153 size=7400 all=217910 active=11932 piece=দেন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=153 min_freq=41
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=153 size=7420 all=218292 active=11249 piece=▁ঘোষিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=152 size=7440 all=218602 active=11559 piece=▁ইউনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=152 size=7460 all=218646 active=11603 piece=▁এক্সপের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=151 size=7480 all=218839 active=11796 piece=ুড়ি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=151 size=7500 all=219100 active=12057 piece=▁পলিটেকনিক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=151 min_freq=40
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=150 size=7520 all=219453 active=11306 piece=▁মোটর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=150 size=7540 all=219571 active=11424 piece=▁সৌন্দর্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=149 size=7560 all=219808 active=11661 piece=▁মুখের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=148 size=7580 all=219944 active=11797 piece=িবর্গ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=148 size=7600 all=220159 active=12012 piece=▁ফার্স্ট
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=148 min_freq=40
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=147 size=7620 all=220509 active=11354 piece=▁আবদ্ধ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=146 size=7640 all=220656 active=11501 piece=্যুদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=146 size=7660 all=220851 active=11696 piece=▁মানেই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=145 size=7680 all=220983 active=11828 piece=▁১৫৫
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=144 size=7700 all=221145 active=11990 piece=সাস
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=144 min_freq=39
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=144 size=7720 all=221538 active=11399 piece=▁কাণ্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=143 size=7740 all=221747 active=11608 piece=▁বলছি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=143 size=7760 all=221809 active=11670 piece=▁উপাচার্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=142 size=7780 all=222110 active=11971 piece=▁ফলের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=141 size=7800 all=222145 active=12006 piece=টল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=141 min_freq=38
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=141 size=7820 all=222529 active=11444 piece=▁উপন্যাসের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=140 size=7840 all=222868 active=11783 piece=▁বাদ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=139 size=7860 all=223239 active=12154 piece=িক্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=139 size=7880 all=223444 active=12359 piece=▁পাণ্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=138 size=7900 all=223498 active=12413 piece=৩৬
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=138 min_freq=38
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=138 size=7920 all=223898 active=11517 piece=▁পরগণ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=138 size=7940 all=223984 active=11603 piece=▁প্রযুক্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=137 size=7960 all=224264 active=11883 piece=▁ইরাকি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=136 size=7980 all=224443 active=12062 piece=▁অতিথি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=135 size=8000 all=224709 active=12328 piece=তাপ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=135 min_freq=37
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=135 size=8020 all=225008 active=11482 piece=▁বারের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=134 size=8040 all=225084 active=11558 piece=ভান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=134 size=8060 all=225367 active=11841 piece=▁গ্রোস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=134 size=8080 all=225433 active=11907 piece=▁আনুষ্ঠানিকভাবে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=133 size=8100 all=225823 active=12297 piece=▁আকর্ষ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=133 min_freq=37
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=133 size=8120 all=225909 active=11364 piece=▁দিয়েছিলেন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=132 size=8140 all=226192 active=11647 piece=াবাদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=132 size=8160 all=226323 active=11778 piece=▁অংশবিশেষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=131 size=8180 all=226533 active=11988 piece=▁খন্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=131 size=8200 all=226637 active=12092 piece=▁নোয়াখালী
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=131 min_freq=36
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=130 size=8220 all=226882 active=11576 piece=▁পিঠা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=130 size=8240 all=226967 active=11661 piece=▁বিশেষজ্ঞ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=129 size=8260 all=227382 active=12076 piece=▁ন্যা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=129 size=8280 all=227497 active=12191 piece=▁মিডিয়াম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=128 size=8300 all=227834 active=12528 piece=▁কথ্য
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=128 min_freq=36
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=128 size=8320 all=227976 active=11527 piece=শায়ারের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=127 size=8340 all=228170 active=11721 piece=ছানো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=127 size=8360 all=228295 active=11846 piece=▁সন্তানের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=126 size=8380 all=228560 active=12111 piece=▁আধ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=126 size=8400 all=228635 active=12186 piece=▁কম্পিউটারের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=126 min_freq=35
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=125 size=8420 all=228976 active=11772 piece=▁জগতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=125 size=8440 all=229027 active=11823 piece=▁হবিগঞ্জ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=124 size=8460 all=229454 active=12250 piece=▁লেব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=124 size=8480 all=229659 active=12455 piece=▁বিপন্ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=123 size=8500 all=229989 active=12785 piece=ূনতম
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=123 min_freq=35
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=123 size=8520 all=230086 active=11593 piece=▁ভূমিকম্প
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=122 size=8540 all=230281 active=11788 piece=▁র্নাম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=121 size=8560 all=230398 active=11905 piece=পিজ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=121 size=8580 all=230679 active=12186 piece=▁হযরত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=121 size=8600 all=230815 active=12322 piece=▁প্যারিস
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=121 min_freq=35
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=120 size=8620 all=231107 active=11829 piece=িবর্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=120 size=8640 all=231218 active=11940 piece=▁সবাইকে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=119 size=8660 all=231536 active=12258 piece=াতিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=119 size=8680 all=231823 active=12545 piece=▁আগামী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=119 size=8700 all=231889 active=12611 piece=▁প্রদানকারী
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=119 min_freq=34
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=118 size=8720 all=232178 active=11882 piece=ফেডার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=118 size=8740 all=232313 active=12017 piece=▁গিয়েছে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=117 size=8760 all=232400 active=12104 piece=াথ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=117 size=8780 all=232814 active=12518 piece=▁বলেই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=117 size=8800 all=232916 active=12620 piece=▁বিপ্লবের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=117 min_freq=34
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=116 size=8820 all=233164 active=11894 piece=শ্বিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=116 size=8840 all=233260 active=11990 piece=▁একাডেমী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=115 size=8860 all=233558 active=12288 piece=▁বনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=115 size=8880 all=233778 active=12508 piece=▁সহায়ক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=114 size=8900 all=234140 active=12870 piece=▁২৬০
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=114 min_freq=33
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=114 size=8920 all=234303 active=11861 piece=▁শেয়ার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=113 size=8940 all=234353 active=11911 piece=রিও
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=113 size=8960 all=234678 active=12236 piece=চুম্বী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=113 size=8980 all=234825 active=12383 piece=▁সেনাপতি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=112 size=9000 all=235176 active=12734 piece=▁জলে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=112 min_freq=33
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=112 size=9020 all=235383 active=11963 piece=▁যায়গা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=112 size=9040 all=235421 active=12001 piece=▁আর্জেন্টিনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=111 size=9060 all=235853 active=12433 piece=▁ফজল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=111 size=9080 all=235989 active=12569 piece=▁ব্র্গ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=111 size=9100 all=236044 active=12624 piece=▁অস্ট্রিয়ার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=111 min_freq=32
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=110 size=9120 all=236308 active=12067 piece=▁হত্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=110 size=9140 all=236370 active=12129 piece=▁প্রকৌশলে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=109 size=9160 all=236835 active=12594 piece=▁জোড়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=109 size=9180 all=236937 active=12696 piece=▁ধ্রুপদী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=108 size=9200 all=237302 active=13061 piece=▁জলজ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=108 min_freq=32
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=108 size=9220 all=237522 active=12082 piece=▁সিডনি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=107 size=9240 all=237605 active=12165 piece=৮৭
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=107 size=9260 all=237992 active=12552 piece=▁মুড়ি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=107 size=9280 all=238097 active=12657 piece=▁দার্জিলিং
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=106 size=9300 all=238485 active=13045 piece=ওয়ালা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=106 min_freq=31
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=106 size=9320 all=238673 active=12086 piece=রনমেন্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=105 size=9340 all=238865 active=12278 piece=রাফ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=105 size=9360 all=239041 active=12454 piece=▁ব্রাগ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=105 size=9380 all=239126 active=12539 piece=▁শীতকালে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=104 size=9400 all=239374 active=12787 piece=মতে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=104 min_freq=31
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=104 size=9420 all=239738 active=12307 piece=াবেক্ষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=104 size=9440 all=239776 active=12345 piece=▁স্পেনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=103 size=9460 all=239826 active=12395 piece=জ্জা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=103 size=9480 all=240133 active=12702 piece=▁সাহা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=103 size=9500 all=240213 active=12782 piece=▁লাগছিল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=103 min_freq=31
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=102 size=9520 all=240335 active=12128 piece=শিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=102 size=9540 all=240757 active=12550 piece=▁৩৯৯
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=102 size=9560 all=240882 active=12675 piece=▁হিব্রু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=101 size=9580 all=241165 active=12958 piece=▁ডেথ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=101 size=9600 all=241341 active=13134 piece=▁আস্তে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=101 min_freq=30
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=101 size=9620 all=241378 active=12103 piece=▁সার্বভৌম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=100 size=9640 all=241629 active=12354 piece=▁কাঁক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=100 size=9660 all=241758 active=12483 piece=সেকেন্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=100 size=9680 all=241847 active=12572 piece=▁পেয়েছিল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=99 size=9700 all=242135 active=12860 piece=▁নাত
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=99 min_freq=30
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=99 size=9720 all=242269 active=12217 piece=▁প্লাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=99 size=9740 all=242354 active=12302 piece=▁দক্ষিণের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=98 size=9760 all=242605 active=12553 piece=েশান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=98 size=9780 all=242795 active=12743 piece=▁ইয়ার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=98 size=9800 all=242855 active=12803 piece=▁যানবাহন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=98 min_freq=30
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=97 size=9820 all=243222 active=12505 piece=ন্টন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=97 size=9840 all=243498 active=12781 piece=▁বৃহদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=97 size=9860 all=243665 active=12948 piece=▁গার্ডেন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=96 size=9880 all=243747 active=13030 piece=▁লং
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=96 size=9900 all=243997 active=13280 piece=▁ফক্স
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=96 min_freq=29
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=96 size=9920 all=244119 active=12318 piece=▁মক্কার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=95 size=9940 all=244315 active=12514 piece=বলিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=95 size=9960 all=244524 active=12723 piece=▁ম্দো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=95 size=9980 all=244595 active=12794 piece=▁তাইওয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=94 size=10000 all=244666 active=12865 piece=লক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=94 min_freq=29
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=94 size=10020 all=244930 active=12456 piece=▁একদমই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=94 size=10040 all=245003 active=12529 piece=ুয়ারিতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=93 size=10060 all=245061 active=12587 piece=চৌধ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=93 size=10080 all=245441 active=12967 piece=▁লুস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=93 size=10100 all=245609 active=13135 piece=▁বন্ধন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=93 min_freq=29
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=93 size=10120 all=245671 active=12336 piece=▁উৎপাদনের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=92 size=10140 all=245791 active=12456 piece=্গুন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=92 size=10160 all=245973 active=12638 piece=▁পড়তে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=92 size=10180 all=246020 active=12685 piece=তিহাসিকভাবে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=91 size=10200 all=246336 active=13001 piece=মান্ড
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=91 min_freq=28
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=91 size=10220 all=246489 active=12442 piece=▁শরীরে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=91 size=10240 all=246547 active=12500 piece=▁বার্গারে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=90 size=10260 all=246828 active=12781 piece=▁ভীড়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=90 size=10280 all=246979 active=12932 piece=▁শ্যু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=90 size=10300 all=247088 active=13041 piece=▁নেহারি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=90 min_freq=28
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=90 size=10320 all=247111 active=12375 piece=▁ভূমধ্যসাগর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=89 size=10340 all=247479 active=12743 piece=▁ভোক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=89 size=10360 all=247644 active=12908 piece=▁দরগাহ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=89 size=10380 all=247729 active=12993 piece=▁শিলালিপি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=88 size=10400 all=247976 active=13240 piece=ড্ডি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=88 min_freq=28
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=88 size=10420 all=248230 active=12643 piece=▁দশমিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=88 size=10440 all=248289 active=12702 piece=▁চারপাশে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=87 size=10460 all=248572 active=12985 piece=টাকে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=87 size=10480 all=248899 active=13312 piece=▁১২৯
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=87 size=10500 all=249032 active=13445 piece=▁ব্রুন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=87 min_freq=27
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=87 size=10520 all=249086 active=12498 piece=▁হচ্ছিলো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=86 size=10540 all=249245 active=12657 piece=▁পরই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=86 size=10560 all=249452 active=12864 piece=▁সসের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=86 size=10580 all=249552 active=12964 piece=▁সেতুটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=86 size=10600 all=249570 active=12982 piece=▁নিয়েছিলেন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=86 min_freq=27
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=85 size=10620 all=249967 active=12876 piece=▁লক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=85 size=10640 all=250234 active=13143 piece=▁এটাও
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=85 size=10660 all=250369 active=13278 piece=▁রোগের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=85 size=10680 all=250420 active=13329 piece=▁আকর্ষণীয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=84 size=10700 all=250712 active=13621 piece=ছড়া
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=84 min_freq=27
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=84 size=10720 all=251075 active=12868 piece=▁দিসে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=84 size=10740 all=251153 active=12946 piece=▁ফরাসী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=84 size=10760 all=251226 active=13019 piece=▁বনাঞ্চল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=83 size=10780 all=251347 active=13140 piece=কাত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=83 size=10800 all=251685 active=13478 piece=ধিকার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=83 min_freq=27
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=83 size=10820 all=251812 active=12699 piece=▁খাম্স
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=83 size=10840 all=251850 active=12737 piece=▁দৃষ্টিভ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=82 size=10860 all=251865 active=12752 piece=পণ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=82 size=10880 all=252196 active=13083 piece=▁তোর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=82 size=10900 all=252358 active=13245 piece=▁১৮৭৫
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=82 min_freq=26
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=82 size=10920 all=252419 active=12677 piece=▁দূরত্বে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=82 size=10940 all=252419 active=12677 piece=▁রাষ্ট্রপতির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=81 size=10960 all=252682 active=12940 piece=▁৪টা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=81 size=10980 all=252845 active=13103 piece=▁২০২৩
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=81 size=11000 all=252954 active=13212 piece=▁সবশেষে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=81 min_freq=26
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=81 size=11020 all=253000 active=12694 piece=▁সর্বাপেক্ষা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=80 size=11040 all=253409 active=13103 piece=▁কুচ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=80 size=11060 all=253601 active=13295 piece=▁সারি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=80 size=11080 all=253665 active=13359 piece=▁বাহরাই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=80 size=11100 all=253687 active=13381 piece=▁ইন্ডিয়ান
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=80 min_freq=26
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=79 size=11120 all=253925 active=12922 piece=ভক্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=79 size=11140 all=254152 active=13149 piece=▁মুসা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=79 size=11160 all=254321 active=13318 piece=▁মৌর্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=79 size=11180 all=254401 active=13398 piece=▁প্রথাগত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=78 size=11200 all=254568 active=13565 piece=টিও
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=78 min_freq=26
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=78 size=11220 all=255024 active=13118 piece=ন্ডের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=78 size=11240 all=255244 active=13338 piece=▁অনন্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=78 size=11260 all=255319 active=13413 piece=▁চালানো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=78 size=11280 all=255339 active=13433 piece=▁পরিত্যক্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=77 size=11300 all=255644 active=13738 piece=▁তথ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=77 min_freq=25
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=77 size=11320 all=255890 active=13017 piece=সম্মত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=77 size=11340 all=256033 active=13160 piece=▁আজীবন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=77 size=11360 all=256089 active=13216 piece=▁জৈনধর্ম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=77 size=11380 all=256106 active=13233 piece=▁প্রক্রিয়ায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=76 size=11400 all=256426 active=13553 piece=▁খোদ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=76 min_freq=25
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=76 size=11420 all=256583 active=12971 piece=▁এস্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=76 size=11440 all=256660 active=13048 piece=▁১৮০০
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=76 size=11460 all=256724 active=13112 piece=▁লেগ্স
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=76 size=11480 all=256792 active=13180 piece=▁শিক্ষিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=75 size=11500 all=256802 active=13190 piece=৮২
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=75 min_freq=25
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=75 size=11520 all=257173 active=13182 piece=▁১১৯
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=75 size=11540 all=257338 active=13347 piece=▁উপহার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=75 size=11560 all=257387 active=13396 piece=▁বুলগের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=75 size=11580 all=257418 active=13427 piece=▁ক্ষমতায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11600 all=257430 active=13439 piece=ফফ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=74 min_freq=25
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11620 all=257814 active=13238 piece=▁থের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11640 all=258061 active=13485 piece=▁দাদা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11660 all=258088 active=13512 piece=▁শ্বাস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11680 all=258146 active=13570 piece=▁তীক্ষ্ণ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=74 size=11700 all=258155 active=13579 piece=▁চিড়িয়াখানা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=74 min_freq=24
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=73 size=11720 all=258434 active=13186 piece=বেলের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=73 size=11740 all=258525 active=13277 piece=▁মায়ো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=73 size=11760 all=258600 active=13352 piece=▁ভোটার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=73 size=11780 all=258646 active=13398 piece=▁করছিলেন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=73 size=11800 all=258677 active=13429 piece=▁প্রতিবেশী
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=73 min_freq=24
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=72 size=11820 all=258924 active=13181 piece=িপির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=72 size=11840 all=259055 active=13312 piece=াকাণ্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=72 size=11860 all=259144 active=13401 piece=াসমূহের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=72 size=11880 all=259214 active=13471 piece=▁মহাসড়কের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=71 size=11900 all=259425 active=13682 piece=▁ভয়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=71 min_freq=24
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=71 size=11920 all=259675 active=13216 piece=োয়ান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=71 size=11940 all=259757 active=13298 piece=▁খালিদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=71 size=11960 all=259813 active=13354 piece=▁চুইঝাল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=71 size=11980 all=259834 active=13375 piece=▁মান্নান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12000 all=259841 active=13382 piece=িঝ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=70 min_freq=24
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12020 all=260183 active=13325 piece=▁জেট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12040 all=260360 active=13502 piece=▁মূলক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12060 all=260438 active=13580 piece=▁মদিনা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12080 all=260550 active=13692 piece=▁ডাক্তার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=70 size=12100 all=260576 active=13718 piece=▁ছোটগল্পকার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=70 min_freq=24
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=69 size=12120 all=260770 active=13223 piece=▁দাত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=69 size=12140 all=260929 active=13382 piece=▁১৮৬৪
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=69 size=12160 all=261017 active=13470 piece=▁শুনতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=69 size=12180 all=261055 active=13508 piece=▁নুরজাহান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12200 all=261210 active=13663 piece=ক্ষী
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=68 min_freq=23
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12220 all=261437 active=13271 piece=সমূহে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12240 all=261542 active=13376 piece=সবার্গ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12260 all=261660 active=13494 piece=▁চাঁদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12280 all=261697 active=13531 piece=▁সৃষ্টির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=68 size=12300 all=261699 active=13533 piece=▁ধর্মাবলম্ব
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=68 min_freq=23
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=67 size=12320 all=261989 active=13369 piece=াসেব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=67 size=12340 all=262185 active=13565 piece=স্টিন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=67 size=12360 all=262382 active=13762 piece=▁অফসেট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=67 size=12380 all=262433 active=13813 piece=▁নিকোবর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=67 size=12400 all=262464 active=13844 piece=▁প্রাচীর
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=67 min_freq=23
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12420 all=262484 active=13138 piece=তস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12440 all=262836 active=13490 piece=▁১২ই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12460 all=262969 active=13623 piece=▁পনের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12480 all=263084 active=13738 piece=▁রেখার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12500 all=263130 active=13784 piece=▁দিয়েছিল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=66 min_freq=23
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=66 size=12520 all=263140 active=13166 piece=▁ব্রিটেনের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12540 all=263336 active=13362 piece=কক্ষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12560 all=263590 active=13616 piece=▁বদর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12580 all=263762 active=13788 piece=▁পারা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12600 all=263857 active=13883 piece=▁বাঁকা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=65 min_freq=22
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12620 all=263982 active=13318 piece=▁পুরুষে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12640 all=264002 active=13338 piece=▁রোমাঞ্চ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=65 size=12660 all=264033 active=13369 piece=▁১০সার্ভিসঃ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12680 all=264436 active=13772 piece=িজার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12700 all=264688 active=14024 piece=▁ঘণ্ট
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=64 min_freq=22
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12720 all=264804 active=13339 piece=▁কাঠাম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12740 all=264885 active=13420 piece=▁তানজান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12760 all=264928 active=13463 piece=▁সপুষ্পক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=64 size=12780 all=264936 active=13471 piece=▁বাস্তবায়ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12800 all=265179 active=13714 piece=▁এডি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=63 min_freq=22
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12820 all=265290 active=13362 piece=▁সহিত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12840 all=265376 active=13448 piece=▁নাবিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12860 all=265433 active=13505 piece=▁তিনবার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12880 all=265499 active=13571 piece=▁বিনামূল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=63 size=12900 all=265514 active=13586 piece=▁পরিভাষায়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=63 min_freq=22
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=12920 all=265664 active=13425 piece=গ্না
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=12940 all=265862 active=13623 piece=▁রোধ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=12960 all=265946 active=13707 piece=ন্টিনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=12980 all=266038 active=13799 piece=▁মোজাম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=13000 all=266105 active=13866 piece=▁সভ্যতা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=62 min_freq=22
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=62 size=13020 all=266141 active=13342 piece=▁বলবিজ্ঞান
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13040 all=266275 active=13476 piece=োকে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13060 all=266529 active=13730 piece=▁শেল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13080 all=266710 active=13911 piece=▁রসিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13100 all=266792 active=13993 piece=▁ফুডের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=61 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13120 all=266839 active=13386 piece=▁পাপড়ি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=61 size=13140 all=266852 active=13399 piece=▁ডকুমেন্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13160 all=266901 active=13448 piece=কিশ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13180 all=267194 active=13741 piece=▁বোট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13200 all=267312 active=13859 piece=▁মেলন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=60 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13220 all=267377 active=13431 piece=িয়ানের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13240 all=267448 active=13502 piece=▁জান্নাত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13260 all=267483 active=13537 piece=▁প্রসঙ্গে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=60 size=13280 all=267494 active=13548 piece=▁জাতীয়তাবাদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13300 all=267685 active=13739 piece=য়াস
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=59 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13320 all=267824 active=13491 piece=▁সরণ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13340 all=267970 active=13637 piece=▁অস্থি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13360 all=268001 active=13668 piece=▁স্টোন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13380 all=268073 active=13740 piece=▁বানিয়ে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13400 all=268122 active=13789 piece=▁ভাল্লুক
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=59 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=59 size=13420 all=268136 active=13421 piece=▁উত্তরাংশে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13440 all=268332 active=13617 piece=াফি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13460 all=268525 active=13810 piece=ভূমিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13480 all=268668 active=13953 piece=▁শিলি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13500 all=268721 active=14006 piece=▁বানায়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=58 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13520 all=268770 active=13482 piece=▁দেবতার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13540 all=268803 active=13515 piece=▁রাস্তায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=58 size=13560 all=268832 active=13544 piece=▁ড্যানিয়েল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13580 all=268975 active=13687 piece=▁৫ই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13600 all=269170 active=13882 piece=▁নিঃ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=57 min_freq=21
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13620 all=269260 active=13539 piece=▁জায়গ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13640 all=269362 active=13641 piece=িস্ট্র
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13660 all=269445 active=13724 piece=▁মৌজার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13680 all=269488 active=13767 piece=▁হাজারী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13700 all=269513 active=13792 piece=▁পরিদর্শন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=57 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=57 size=13720 all=269516 active=13475 piece=▁বিদ্যালয়টিতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13740 all=269853 active=13812 piece=নতুন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13760 all=270109 active=14068 piece=▁পুদ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13780 all=270226 active=14185 piece=▁লোগো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13800 all=270316 active=14275 piece=▁ফোরাম
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=56 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13820 all=270366 active=13562 piece=▁জলাশয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13840 all=270389 active=13585 piece=▁বিনিময়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13860 all=270408 active=13604 piece=▁মুদ্রায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=56 size=13880 all=270425 active=13621 piece=▁সৃষ্টিকর্ম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=13900 all=270599 active=13795 piece=ুদে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=55 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=13920 all=270809 active=13717 piece=▁জেড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=13940 all=271016 active=13924 piece=▁কেনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=13960 all=271059 active=13967 piece=▁২৩শে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=13980 all=271177 active=14085 piece=▁দামটা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=14000 all=271208 active=14116 piece=▁টিস্যু
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=55 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=14020 all=271263 active=13612 piece=▁পদক্ষেপ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=14040 all=271278 active=13627 piece=▁ব্যস্ততম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=55 size=14060 all=271282 active=13631 piece=▁গঙ্গোপাধ্যায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14080 all=271570 active=13919 piece=োসিন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14100 all=271783 active=14132 piece=▁উনার
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=54 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14120 all=271861 active=13667 piece=▁৩০০০
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14140 all=271959 active=13765 piece=▁নেহের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14160 all=272013 active=13819 piece=▁আশুতোষ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14180 all=272061 active=13867 piece=▁এপ্রিলে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=54 size=14200 all=272075 active=13881 piece=▁মহাভারতের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=54 min_freq=20
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14220 all=272198 active=13727 piece=ডাউ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14240 all=272528 active=14057 piece=েশনঃ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14260 all=272735 active=14264 piece=থিয়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14280 all=272850 active=14379 piece=▁মনটা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14300 all=272945 active=14474 piece=▁দাঁড়
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=53 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14320 all=273043 active=13737 piece=▁আব্দুর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14340 all=273069 active=13763 piece=▁শিকারী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14360 all=273097 active=13791 piece=▁সচেতনতা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=53 size=14380 all=273101 active=13795 piece=▁প্লেটারের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14400 all=273131 active=13825 piece=ডাল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=52 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14420 all=273473 active=13962 piece=▁ওএস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14440 all=273636 active=14125 piece=িপন্ন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14460 all=273730 active=14219 piece=▁সতের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14480 all=273846 active=14335 piece=▁জিন্দ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14500 all=273888 active=14377 piece=▁সংসদে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=52 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14520 all=273931 active=13738 piece=▁রাজস্ব
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14540 all=273944 active=13751 piece=স্ট্যান্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=52 size=14560 all=273954 active=13761 piece=▁ব্যান্ডটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14580 all=274028 active=13835 piece=ঙেন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14600 all=274362 active=14169 piece=▁অরি
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=51 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14620 all=274501 active=13850 piece=ঙ্গিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14640 all=274625 active=13974 piece=▁ভেজা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14660 all=274791 active=14140 piece=▁এইটার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14680 all=274845 active=14194 piece=▁অর্থের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14700 all=274856 active=14205 piece=▁স্বত্ব
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=51 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14720 all=274873 active=13754 piece=▁সময়কার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=51 size=14740 all=274901 active=13782 piece=▁বিবেচনায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14760 all=274982 active=13863 piece=কলন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14780 all=275355 active=14236 piece=াইয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14800 all=275553 active=14434 piece=▁লুড
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=50 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14820 all=275664 active=13878 piece=▁নিউর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14840 all=275732 active=13946 piece=▁আনসার
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14860 all=275768 active=13982 piece=▁ভোজ্য
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14880 all=275799 active=14013 piece=▁পরিকাঠ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14900 all=275835 active=14049 piece=▁ব্র্তান
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=50 min_freq=19
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14920 all=275859 active=13816 piece=▁মন্দিরটির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=50 size=14940 all=275852 active=13809 piece=▁রেস্টুরেন্টটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=14960 all=276260 active=14217 piece=্টু
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=14980 all=276501 active=14458 piece=▁আফস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15000 all=276659 active=14616 piece=▁অবৈধ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=49 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15020 all=276711 active=13884 piece=▁সিংগ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15040 all=276747 active=13920 piece=▁বুলেট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15060 all=276847 active=14020 piece=▁ঝুলন্ত
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15080 all=276872 active=14045 piece=▁পেট্রোল
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15100 all=276892 active=14065 piece=▁প্রবেশপথ
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=49 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=49 size=15120 all=276900 active=13849 piece=▁মুহাম্মদের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15140 all=277177 active=14126 piece=োকো
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15160 all=277462 active=14411 piece=িন্ট
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15180 all=277612 active=14561 piece=উয়ের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15200 all=277839 active=14788 piece=▁ওভেন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=48 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15220 all=277924 active=13976 piece=প্রতিক
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15240 all=277965 active=14017 piece=▁নাহলে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15260 all=278019 active=14071 piece=▁চিড়িয়া
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15280 all=278034 active=14086 piece=▁পানছড়ি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15300 all=278030 active=14082 piece=▁রক্ষণশীল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=48 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=48 size=15320 all=278031 active=13901 piece=▁পর্বতারোহী
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15340 all=278062 active=13932 piece=চূ
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15360 all=278375 active=14245 piece=▁আইড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15380 all=278616 active=14486 piece=ায়াম
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15400 all=278687 active=14557 piece=▁শকুন
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=47 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15420 all=278787 active=14028 piece=▁কামড়ে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15440 all=278810 active=14051 piece=▁লেটুস
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15460 all=278836 active=14077 piece=▁মধুপুর
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15480 all=278830 active=14071 piece=▁প্রচণ্ড
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15500 all=278847 active=14088 piece=▁সংগ্রহের
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=47 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=47 size=15520 all=278854 active=13950 piece=▁ওয়েবসাইটের
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15540 all=279052 active=14148 piece=োনে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15560 all=279239 active=14335 piece=▁ছড়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15580 all=279368 active=14464 piece=ায়তন
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15600 all=279444 active=14540 piece=▁স্নে
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=46 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15620 all=279557 active=14077 piece=▁এনেছে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15640 all=279595 active=14115 piece=▁সবারই
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15660 all=279653 active=14173 piece=▁ধ্বনির
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15680 all=279668 active=14188 piece=▁উপসাগরে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15700 all=279674 active=14194 piece=▁শ্রদ্ধা
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=46 min_freq=18
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15720 all=279679 active=13987 piece=▁রাস্তায়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=46 size=15740 all=279680 active=13988 piece=▁পুরস্কারটি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15760 all=279714 active=14022 piece=এটা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15780 all=280026 active=14334 piece=ডিসি
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15800 all=280226 active=14534 piece=▁নকল
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=45 min_freq=17
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15820 all=280392 active=14176 piece=শ্রয়
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15840 all=280492 active=14276 piece=▁সাবা
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15860 all=280581 active=14365 piece=▁চাঁদে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15880 all=280646 active=14430 piece=াগুলিতে
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15900 all=280692 active=14476 piece=▁বঙ্কিম
+bpe_model_trainer.cc(159) LOG(INFO) Updating active symbols. max_freq=45 min_freq=17
+bpe_model_trainer.cc(268) LOG(INFO) Added: freq=45 size=15920 all=280713 active=14055 piece=▁মহাদেশে
+trainer_interface.cc(689) LOG(INFO) Saving model: bangla_gru_sp/sp_bangla.model
+trainer_interface.cc(701) LOG(INFO) Saving vocabs: bangla_gru_sp/sp_bangla.vocab
+  ✓ Trained tokenizer with 16,000 tokens
+  Model saved to: bangla_gru_sp/sp_bangla.model
+
+Sample tokenization:
+  'আমি বাংলায় গান গাই'
+    → Pieces: ['আমি', '▁বাংলায়', '▁গান', '▁গাই']
+    → IDs: [7402, 6063, 1408, 5147]
+  'বাংলাদেশের রাজধানী ঢাকা'
+    → Pieces: ['বাংলাদেশ', 'ের', '▁রাজধানী', '▁ঢাকা']
+    → IDs: [6754, 12, 1607, 836]
+
+✓ Vocabulary size: 16,000
+
+======================================================================
+ STEP 3: Creating Training Sequences
+======================================================================
+  Processed 10,000 texts, sequences: 6,500,403
+  Processed 20,000 texts, sequences: 12,414,424
+  Processed 30,000 texts, sequences: 17,154,738
+  Processed 40,000 texts, sequences: 21,428,190
+  Processed 50,000 texts, sequences: 26,164,603
+
+✓ Total sequences: 27,146,291
+  Train: 24,431,662 sequences, 190,872 batches
+  Val: 2,714,629 sequences, 21,209 batches
+
+======================================================================
+ STEP 4: Creating GRU Model
+======================================================================
+  Architecture: GRU (replaces LSTM)
+  Tokenizer: SentencePiece (bpe)
+  Vocabulary: 16,000
+  Parameters: 15,062,656 (trainable: 15,062,656)
+  Device: mps
+  Dtype: float32
+
+======================================================================
+ STEP 5: Training
+======================================================================
+
+Training Configuration:
+  Epochs: 15
+  Batch size: 128
+  Gradient accumulation: 1 steps
+  Effective batch size: 128
+  Learning rate: 0.001
+----------------------------------------------------------------------
+Epoch  1/15 | Train: 6.2481 | Val: 5.6989 | Top1: 16.4% | Top5: 31.0% | LR: 1.00e-03 | 6671.5s                          
+         └─ ✓ Best model saved
+Epoch 2/15:  96%|█████████████████████████████████████████████████████████▌  | 183208/190872 [1:46:22<1:41:28,  1.26it/s, loss=5.986Epoch 2/15:  96%|█████████████████████████████████████████████████████████▌  | 183211/190872 [1:46:22<1:12:34,  1.76it/s, loss=5.986Epoch 2/15:  96%|███████████████████████████████████████████████████████████▌  | 183214/190872 [1:46:22<52:21,  2.44it/s, loss=5.Epoch 2/15:  96%|████████████████████████████████████████████████████████▋  | 183217/190872 [1:46:22<39:03,  3.27it/s, loss=5.9860]Epoch  2/15 | Train: 5.9854 | Val: 5.6381 | Top1: 16.9% | Top5: 31.7% | LR: 1.00e-03 | 6808.2s                                     
+         └─ ✓ Best model saved
+Epoch 3/15:   3%|██                                                             | 6342/190872 [04:11<15:13:42,  3.37it/s, loss=5.93Epoch 3/15:   3%|██                                                             | 6345/190872 [04:11<11:13:35,  4.57it/s, loss=5.93Epoch 3/15:   3%|██▏                                                             | 6348/190872 [04:11<8:28:06,  6.05it/s, loss=5.93Epoch 3/15:   3%|██                                                           | 6351/190872 [04:12<7:12:11,  7.12it/s, loss=5.9392]Epoch 3/15: Epoch 3/15:  17%|██████████▋                                                  | 33388/190872 [28:39<280:29:48,  6.41s/iEpoch 3/15:  17%|██████████▋                                                  | 33391/190872 [28:40<197:11:21,  4.51s/it, loss=5.94Epoch 3/15:  17%|█Epoch 3/15:  20%|████████████▍                    Epoch 3/15:  20%|██████████                                         | 37530/190872 [31:02<1:24:07, 30.38itEpoch 3/15:  20%|█████████▋                                       | 37534/190872 [31:02<1:24:20, 30.30it/s, lossEpoch 3/15:  79%|█████████████████████████████████████████████████▏            | 151528/190872 [1:50:24<33:07, 19.80it/s, loss=5Epoch 3/15:  79%|█████████████████████████████████████████████████▏            | 151531/190872 [1:50:24<30:17, 21.64it/sEpoch 3/15:  79%|█████████████████████████████████████████████████▏            | 151534/190872 [1:50:24<27:55, 23.47it/sEpoch 3/15:  79%|██████████████████████████████████████          | 151538/190872 [1:50:24<29:53, 21.93it/s, loss=5.9534]Epoch 3/15:  79%|███████████████████████████████Epoch 3/15:  79%|█████████████████████████████████████████████████▏     Epoch 3/15:  79%|█████████████████████████████████████████████████▏            | 151580/190872 [1:50:26<23:40, 27.66it/sEpoch 3/15:  79%|█████████████████████████████████████████████████▏            | 151583/190872 [1:50:26<23:19, 28.07it/sEpoch 3/15:  79%|██████████████████████████████████████          | 151586/190872 [1:50:26<26:31, 24.69it/s, loss=5.9534]Epoch  3/15 | Train: 5.9524 | Val: 5.6139 | Top1: 17.2% | Top5: 32.1% | LR: 1.00e-03 | 8274.3s                          
+         └─ ✓ Best model saved
+Epoch  4/15 | Train: 5.9374 | Val: 5.5984 | Top1: 17.3% | Top5: 32.2% | LR: 1.00e-03 | 6701.0s                          
+         └─ ✓ Best model saved
+Epoch  5/15 | Train: 5.9278 | Val: 5.5919 | Top1: 17.3% | Top5: 32.4% | LR: 1.00e-03 | 6727.0s                          
+         └─ ✓ Best model saved
+Epoch  6/15 | Train: 5.9222 | Val: 5.5867 | Top1: 17.4% | Top5: 32.4% | LR: 1.00e-03 | 6795.2s                          
+         └─ ✓ Best model saved
+Epoch  7/15 | Train: 5.9178 | Val: 5.5869 | Top1: 17.3% | Top5: 32.4% | LR: 1.00e-03 | 6554.6s                                                                                                                                                                               EpEpoch  8/15 | Train: 5.9152 | Val: 5.5804 | Top1: 17.4% | Top5: 32.5% | LR: 1.00e-03 | 6205.8s                                                                                                                                                                                 
+         └─ ✓ Best model saved
+Epoch  9/15 | Train: 5.9120 | Val: 5.5811 | Top1: 17.4% | Top5: 32.5% | LR: 1.00e-03 | 6191.6s                                                                                                                                                                                 
+Epoch 10/15 | Train: 5.9096 | Val: 5.5727 | Top1: 17.5% | Top5: 32.6% | LR: 1.00e-03 | 6197.1s                                                                                                                                                                                 
+         └─ ✓ Best model saved
+Epoch 11/15 | Train: 5.9086 | Val: 5.5701 | Top1: 17.5% | Top5: 32.6% | LR: 1.00e-03 | 6158.3s                                                                                                                                                                                 
+         └─ ✓ Best model saved
+Epoch 12/15 | Train: 5.9075 | Val: 5.5707 | Top1: 17.6% | Top5: 32.6% | LR: 1.00e-03 | 6119.8s                                                                                                                                                                                 
+Epoch 13/15:  42%|████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                    | 80253/190872 [42:05<58:21, 31.59it/s, loss=5.899Epoch 13/15:  42%|███████████████████████████████████████████████████████████████████████████████████▋                                                                                                                   | 80257/190872 [42:05<58:42, 31.40it/s, loss=5.8995]EpocEpoch 13/15:  97%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋      | 184829/190872 [1:37:12<03:11, 31.58it/s, loss=5Epoch 13/15:  97%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊      | 184833/190872 [1:37:12<03:11, 31.52it/s, loss=5.9052]Epoch 13/15 | Train: 5.9055 | Val: 5.5716 | Top1: 17.5% | Top5: 32.5% | LR: 1.00e-03 | 6197.7s                                                                                                                                                                               
+Epoch 14/15:  46%|████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                            | 87989/190872 [46:22<54:18, 31.58it/s, loss=5.900Epoch 14/15:  46%|███████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                           | 87993/190872 [46:22<54:26, 31.49it/s, loss=5.9002]Epoch 14/15:  49%|█████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                                                     | 93486/190872 [49:17<51:40, 31.41it/s, Epoch 14/15:  49%|███████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                   | 93490/190872 [49:17<51:51, 31.29itEpoch 14/15:  49%|█████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                 | 93494/190872 [49:17<Epoch 14/15:  49%|██████████████████████████████████████████████████████████████████████████████████████████▌                                                                                              | 93Epoch 14/15:  49%|██████████████████████████████████████████████████████████████████████████████████████▋                                                                                          | 93502/190872 [49:17<52:50, 30.71it/s, losEpoch 14/15:  49%|███████████████████████████████████████████████████████████████████████                                                                          | 93506/190872 [49:17<53:49Epoch 14/15:  49%|████████████████████████████████████████████████████Epoch 14/15:  49%|██████████████████████████████████████████Epoch 14/15:  49%|████████████████████████████████████████████████▉                                                   | 93518/190872 [49:18<53:48, 30.15it/s, loss=5.9005]Epoch 14/15:  49%|████████████████████████████████████████████████▉                                                   | 93526/190872 [49:18<52:43, 30.78it/sEpoch 14/15:  49%|████████████████████████████████████████████████▌                                               Epoch 14/15:  49%|█████████████████████████████████████████▋                           Epoch 14/15:  49%|███████████████████████████████████████▋                                         | 93538/190872 [49:18<52:49, 30.71it/s, loss=5.9005]Epoch 14/15:  49%|███████████████████████████████████████▋                                         | 93654/190872Epoch 14/15:  49%|████████████████████████████Epoch 14/15:  49%|█████████████████████████████████▊                                   | 93662/190872 [49:22<52:14, 31.01it/s, loss=5.9006]        Epoch 14/15:  49%|███████████████████████████▍                            | 93666/190872 [49:22<52:39, 30.77it/s, loss=5.9006]Epoch 14/15:  64%|█████████████████████████████████▋                   | 12120Epoch 14/15:  64%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                               Epoch 14/15:  64%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                   | 121325/190872 [1:04:41<37:07, 31.22it/s, loss=5.Epoch 14/15:  64%|█████████████████████████████████████████████████████████████████████▉                                        | 121329/190872 [1:04:42<37:39, 30.77it/s, loss=5.9023]                                                                     Epoch 14/15:  64%|██████████████████████████████████▎                   | 121333/190872 [1:04:42<37:37, 30.81it/s, loss=5.9023EpoEpoch 14/15:  64%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                       | 121501/190872 [1:04:47<36:38, 31.Epoch 14/15:  64%|████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                              | 121505/190872 [1:04:47<37:01, 31.22it/s, loss=5.9024]        Epoch 14/15:  64%|█████████████████████████████████████████████████████████▉                                 | 121509/190872 [Epoch 14/15:  64%|█████████████████████████████████▋                   | 121513/190872 [1:04:47<37:35, 30.75it/s, loss=5.9024]Epoch 14/15 | Train: 5.9046 | Val: 5.5685 | Top1: 17.5% | Top5: 32.7% | LR: 1.00e-03 | 6239.4s                                
+         └─ ✓ Best model saved
+Epoch 15/15 | Train: 5.9035 | Val: 5.5648 | Top1: 17.6% | Top5: 32.7% | LR: 1.00e-03 | 6164.7s                                
+         └─ ✓ Best model saved
+
+✓ Training complete! Best val loss: 5.5648
+
+======================================================================
+ STEP 6: Saving Model
+======================================================================
+  ✓ Model saved to bangla_gru_sp/model.pt
+  ✓ Tokenizer saved to bangla_gru_sp/sp_bangla.model
+
+======================================================================
+ STEP 7: Demo
+======================================================================
+
+============================================================
+  বাংলা Next Word Prediction Demo (GRU + SentencePiece)
+============================================================
+
+📝 Input: আমি বাংলায়
+   Tokens: ['আমি', '▁বাংলায়']
+   Predictions:
+   1. এই             1.4% 
+   2. এর             1.2% 
+   3. এক             0.9% 
+   4. একটি           0.8% 
+   5. অনেক           0.8% 
+
+📝 Input: বাংলাদেশের রাজধানী
+   Tokens: ['বাংলাদেশ', 'ের', '▁রাজধানী']
+   Predictions:
+   1. ছিল            6.6% █
+   2. ও              2.6% 
+   3. এবং            2.2% 
+   4. হিসেবে         1.8% 
+   5. ঢাকা           1.4% 
+
+📝 Input: আজকে আমি
+   Tokens: ['আজকে', '▁আমি']
+   Predictions:
+   1. আমার           2.6% 
+   2. এই             1.9% 
+   3. আর             1.5% 
+   4. আমি            1.1% 
+   5. মনে            0.9% 
+
+📝 Input: সে স্কুলে
+   Tokens: ['সে', '▁স্কুলে']
+   Predictions:
+   1. ভর্তি         16.8% ████
+   2. পড়াশোনা      11.2% ██
+   3. অধ্যয়ন        6.8% █
+   4. পড়            2.2% 
+   5. পড়ার          1.5% 
+
+📝 Input: এটি একটি
+   Tokens: ['এটি', '▁একটি']
+   Predictions:
+   1. নতুন           0.9% 
+   2. প্রধান         0.6% 
+   3. একটি           0.5% 
+   4. নির্দিষ্ট      0.5% 
+   5. অংশ            0.5% 
+
+======================================================================
+ DONE!
+======================================================================
+
+Model saved to: bangla_gru_sp/
+  - model.pt (GRU weights)
+  - sp_bangla.model (SentencePiece tokenizer)
+  - sp_bangla.vocab (Vocabulary)
+
+To load and use:
+  python train_bangla_gru_sp.py --load bangla_gru_sp --interactive
+Exception ignored in: <function ResourceTracker.__del__ at 0x111729940>
+Traceback (most recent call last):
+  File "/Users/md.asadujjamannoor/.cache/uv/environments-v2/train-bangla-gru-sp-3-bf72139bb7e189ec/lib/python3.12/site-packages/multiprocess/resource_tracker.py", line 80, in __del__
+  File "/Users/md.asadujjamannoor/.cache/uv/environments-v2/train-bangla-gru-sp-3-bf72139bb7e189ec/lib/python3.12/site-packages/multiprocess/resource_tracker.py", line 89, in _stop
+  File "/Users/md.asadujjamannoor/.cache/uv/environments-v2/train-bangla-gru-sp-3-bf72139bb7e189ec/lib/python3.12/site-packages/multiprocess/resource_tracker.py", line 102, in _stop_locked
+AttributeError: '_thread.RLock' object has no attribute '_recursion_count'
