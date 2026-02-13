@@ -1,10 +1,3 @@
-# /// script
-# requires-python = "==3.12"
-# dependencies = [
-#   "datasets", "torch", "matplotlib", "sentencepiece", "tqdm"
-# ]
-# ///
-
 """
 বাংলা Next Word Prediction Model - GRU + SentencePiece (Mac M1 MPS)
 
