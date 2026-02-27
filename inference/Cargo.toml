@@ -1,0 +1,9 @@
+[package]
+name = "bangla-predictor"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ort = { version = "=2.0.0-rc.11", features = ["ndarray"] }
+ndarray = "0.17"
+sentencepiece = "0.12"
