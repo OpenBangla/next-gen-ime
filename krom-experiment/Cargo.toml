@@ -1,0 +1,48 @@
+[package]
+name = "krom-experiment"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91.0"
+license = "MIT"
+description = "Context-based ranker for Bengali word suggestions using n-gram models stored in FSTs."
+keywords = ["bengali", "ngram", "fst", "ime", "ranking"]
+
+[features]
+default = []
+# Offline model building (`krom-build`) and evaluation (`krom-eval`).
+build = ["dep:rayon", "dep:upodesh"]
+# KenLM runtime scorer (LGPL-3.0 C++ code, compiled from source by kenlm-rs).
+kenlm = ["dep:kenlm_rs"]
+# SentencePiece-based stem analyzer, for the ablation only (builds vendored SentencePiece; needs cmake).
+sp-eval = ["dep:sentencepiece"]
+
+[dependencies]
+fst = "0.4"
+memmap2 = "0.9"
+unicode-normalization = "0.1"
+rustc-hash = "2.1"
+rayon = { version = "1.12", optional = true }
+upodesh = { version = "=0.4.0", optional = true }
+kenlm_rs = { package = "kenlm-rs", version = "=0.1.0", optional = true }
+sentencepiece = { version = "0.14", features = ["static"], optional = true }
+
+[dev-dependencies]
+criterion = "0.8"
+upodesh = "=0.4.0"
+
+[[bin]]
+name = "krom-build"
+required-features = ["build"]
+
+[[bin]]
+name = "krom-eval"
+required-features = ["build"]
+
+[[bench]]
+name = "rank"
+harness = false
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+debug = 1
